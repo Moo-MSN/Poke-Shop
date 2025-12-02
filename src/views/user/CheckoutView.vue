@@ -19,20 +19,21 @@ const CartStore = useCartStore();
         <locationPin class="mt-1.5 mr-3"> </locationPin>
         <div class="text text-xl font-semibold">Delivery Address</div>
       </div>
-
+      
       <div class="flex mt-3 ml-20">
         <h1 class="font-semibold">
           Name:
           <br />
           Phone:
         </h1>
-
+        
         <address class="ml-15">Address: รอดึงข้อมูลจาก localStorage หน้า Register</address>
       </div>
-
+      
       <div class="bg-base-300 rounded-box grid h-2 mt-5"></div>
-
+      
       <div class="grid grid-cols-4 ml-15 mt-5 items-center gap-4 justify-items-center">
+        <div class="text-xl font-semibold" v-if="CartStore.items.length === 0">Cart is Empty</div>
         <div class="text text-2xl">Products Ordered</div>
         <div>Unit Price</div>
         <div>Amount</div>
@@ -70,7 +71,7 @@ const CartStore = useCartStore();
       </div>
       <div class="grid justify-end-safe mr-5">
 
-        <RouterLink :to="{ name: '' }" class="btn btn-accent mt-4">Place Order</RouterLink>
+        <RouterLink :to="{ name: 'success' }" class="btn btn-accent mt-4">Place Order</RouterLink>
       </div>
       <div class="divider"></div>
     </div>
