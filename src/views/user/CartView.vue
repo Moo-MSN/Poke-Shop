@@ -3,6 +3,11 @@ import UserLayout from "@/layouts/UserLayout.vue";
 import { useCartStore } from "@/stores/user/cart";
 
 const CartStore = useCartStore();
+
+const changeQuantity = (event, index) => {
+  const newQuantity = parseInt(event.target.value);
+  CartStore.updateQuantity(index, newQuantity); // ทำการแปลง String to Numbers
+};
 </script>
 
 <template>
@@ -21,7 +26,8 @@ const CartStore = useCartStore();
       </div>
       <div class="bg-base-300 rounded-box grid h-3 mt-5"></div>
 
-      <section class="justify-center-safe" v-for="(item,index) in CartStore.items">
+      <div class="text-xl font-semibold mt-5 ml-12" v-if="CartStore.items.length === 0">Cart is Empty !!!</div>
+      <section class="justify-center-safe" v-else v-for="(item, index) in CartStore.items">
         <div class="relative grid grid-cols-5 justify-items-center-safe h-full mt-5 gap-4 ml-2">
           <div>
             <div class="flex items-center gap-3">
@@ -39,13 +45,14 @@ const CartStore = useCartStore();
 
           <div>฿ {{ item.price }}</div>
           <div>
-            <select class="select sm:select-xs xl:select" v-model="item.quantity">
+            <select class="select sm:select-xs xl:select" @change="changeQuantity($event, index)">
+              <!--ทำการส่ง Quantity ไป เพื่อเปลี่ยนเป็น String-->
               <option disabled selected="">Quantity</option>
               <option v-for="quantity in [1, 2, 3, 4, 5]">{{ quantity }}</option>
             </select>
           </div>
-          <div>฿ 1000</div>
-          <div class="tab tabs-sm"  @click ="CartStore.removeItemInCart(index)">Delete</div>
+          <div>฿ {{ CartStore.summaryPrice }}</div>
+          <div class="tab tabs-sm" @click="CartStore.removeItemInCart(index)">Delete</div>
         </div>
         <div class="divider"></div>
       </section>
@@ -53,7 +60,9 @@ const CartStore = useCartStore();
 
       <div class="divider"></div>
       <div class="grid justify-end mr-10">
-        <div class="text-xl">Summary Pirce: <b class="text-orange-600">฿ 1,000</b></div>
+        <div class="text-xl">
+          Summary Pirce: <b class="text-orange-600">฿ {{ CartStore.summaryPrice }}</b>
+        </div>
         <RouterLink :to="{ name: 'checkout' }" class="btn btn-accent mt-4">Check Out</RouterLink>
       </div>
     </section>
