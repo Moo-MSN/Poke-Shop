@@ -13,6 +13,17 @@ export const useCartStore = defineStore("cart", {
       }, 
     ],
   }),
+  getters:{
+    summaryQuantity (state){
+      return state.items.reduce((acc, item) => acc + item.quantity,0 ) // เป็น Short cut ของด้านล่าง เขียนได้ 2 แบบ
+    },
+
+    summaryPrice (state){
+      return state.items.reduce((acc, item) =>{
+        return acc + (item.price * item.quantity)
+      },0) //
+    }
+  },
   actions: {
     addToCart(productData) {
         this.items.push(productData)
