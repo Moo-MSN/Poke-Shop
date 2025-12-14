@@ -1,10 +1,19 @@
 <script setup>
 import UserLayout from "@/layouts/UserLayout.vue";
 import Product from "@/components/Product.vue";
+import { useRouter } from "vue-router";
 
 import { useProductStore } from "@/stores/user/Product";
+import { useCartStore } from "@/stores/user/cart";
 
 const productStore = useProductStore();
+const CartStore = useCartStore();
+const router = useRouter();
+
+const addToCart = (product) => {
+  CartStore.addToCart(product);
+  router.push({ name: "cart" });
+};
 </script>
 
 <template>
@@ -22,7 +31,7 @@ const productStore = useProductStore();
 
       <!--Product Store-->
       <!-- Move Code to Components for use in store and search page-->
-      <Product :products="productStore.list"></Product>
+      <Product :products="productStore.list" :addToCart="addToCart"> </Product>
     </div>
     <div class="divider"></div>
   </UserLayout>
