@@ -21,7 +21,7 @@ const changeQuantity = (event, index) => {
         <div>Name</div>
         <div>Unit Price</div>
         <div>Quantity</div>
-        <div>Total Price</div>
+
         <div>Action</div>
       </div>
       <div class="bg-base-300 rounded-box grid h-3 mt-5"></div>
@@ -45,13 +45,13 @@ const changeQuantity = (event, index) => {
 
           <div>฿ {{ item.price }}</div>
           <div>
-            <select class="select sm:select-xs xl:select" @change="changeQuantity($event, index)">
+            <select v-model="item.quantity" class="select sm:select-xs xl:select" @change="changeQuantity($event, index)">
               <!--ทำการส่ง Quantity ไป เพื่อเปลี่ยนเป็น String-->
               <option disabled selected="">Quantity</option>
               <option v-for="quantity in [1, 2, 3, 4, 5]">{{ quantity }}</option>
             </select>
           </div>
-          <div>฿ {{ CartStore.summaryPrice }}</div>
+
           <div class="tab tabs-sm" @click="CartStore.removeItemInCart(index)">Delete</div>
         </div>
         <div class="divider"></div>
