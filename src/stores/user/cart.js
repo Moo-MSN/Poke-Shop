@@ -10,11 +10,10 @@ export const useCartStore = defineStore("cart", {
     },
 
     summaryPrice(state) {
-      return state.items.reduce((acc, item) => {
-        return acc + item.price * item.quantity;
-      }, 0); 
+      return state.items.reduce((acc, item) => 
+        acc + (item.price * item.quantity), 0
+      );
     },
-    
   },
   actions: {
     loadCart() {
@@ -25,18 +24,17 @@ export const useCartStore = defineStore("cart", {
       }
     },
     addToCart(productData) {
-      const findProductIndex = this.items.findIndex (item => {
-        return item.name === productData.name
-      })
-      if (findProductIndex <0 ) {
-        productData.quantity = 1
-        this.items.push(productData)
+      const findProductIndex = this.items.findIndex((item) => {
+        return item.name === productData.name;
+      });
+      if (findProductIndex < 0) {
+        productData.quantity = 1;
+        this.items.push(productData);
       } else {
-        const currentItem = this.items[findProductIndex]
-        this.updateQuantity(findProductIndex, currentItem.quantity +1)
+        const currentItem = this.items[findProductIndex];
+        this.updateQuantity(findProductIndex, currentItem.quantity + 1);
       }
 
-      
       localStorage.setItem("cart-data", JSON.stringify(this.items)); //Save data to localstorage
     },
     updateQuantity(index, quantity) {
