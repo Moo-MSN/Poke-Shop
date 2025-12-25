@@ -69,27 +69,29 @@ const CartStore = useCartStore();
 
       <div class="bg-base-300 rounded-box grid h-2 mt-5 w-full"></div>
 
-      <div class="bg-orange-100 w-full p-10 justify-items-end">
-        <div class="mr-2">
-          <div class="flex align-middle justify-between">
+      <div class="flex bg-orange-100 p-8 justify-end">
+        <div >
+          <div class="grid grid-cols-2 gap-y-2">
+
             <div>Merchandise Subtotal :</div>
-            <div>฿ {{ CartStore.summaryPrice }}</div>
-          </div>
-          <div class="flex align-middle justify-between">
+            <div class="text-right ">฿ {{ CartStore.summaryPrice }}</div>
+            
             <div>Shipping Subtotal :</div>
-            <div>฿ 0</div>
-          </div>
-          <div class="flex align-middle justify-between">
+            <div class="text-right">฿ 0</div>
+            
             <div>Total Payment :</div>
-            <div class="text-orange-400">
+            <div class="text-orange-400 text-right">
               <b>฿ {{ CartStore.summaryPrice }}</b>
             </div>
           </div>
-        </div>
-        <div class="grid justify-end-safe mr-5">
-          <RouterLink :to="{ name: 'success' }" class="btn btn-accent mt-4">Place Order</RouterLink>
+          
+          <div class="flex justify-end">
+            <RouterLink :to="{ name: 'success' }" class="btn btn-accent mt-4">Place Order</RouterLink>
+          </div>
         </div>
       </div>
     </div>
+
+    
   </UserLayout>
 </template>
