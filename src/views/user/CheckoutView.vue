@@ -68,7 +68,7 @@ const CartStore = useCartStore();
       </table>
 
       <div class="bg-base-300 rounded-box grid h-2 mt-5 w-full"></div>
-
+       <!-- กล่องสรุปอยู่ด้านขวา -->
       <div class="flex bg-orange-100 p-8 justify-end">
         <div >
           <div class="grid grid-cols-2 gap-y-2">
