@@ -1,11 +1,16 @@
 <script setup>
 import UserLayout from "@/layouts/UserLayout.vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 
 import locationPin from "@/components/icons/location pin.vue";
 import { useCartStore } from "@/stores/user/cart";
 
 const CartStore = useCartStore();
+
+const payment = () => {
+  CartStore.placeOrder()// รอใส่ userformData
+  console.log(); // ต้องทำการสร้างข้อมูลที่อยู่ในหน้า Profile ก่อน เพราะเราจะทำการดึง userData มาประกอบกันก่อนส่งข้อมูลไปหน้า success
+};
 </script>
 
 <template>
@@ -56,42 +61,37 @@ const CartStore = useCartStore();
             <td>{{ item.name }}</td>
             <td>{{ item.price }}</td>
             <td>
-              <select v-model="item.quantity" class="select w-13" @change="changeQuantity($event, index)">
-                <!--ทำการส่ง Quantity ไป เพื่อเปลี่ยนเป็น String-->
-                <option v-for="quantity in [1, 2, 3, 4, 5]">{{ quantity }}</option>
-              </select>
+              {{ item.quantity }}
             </td>
             <td>{{ item.price * item.quantity }}</td>
-            <td class="tab" @click="CartStore.removeItemInCart(index)">Delete</td>
+
+            <RouterLink :to="{ name: 'cart' }" class="tab">Edit</RouterLink>
           </tr>
         </tbody>
       </table>
 
       <div class="bg-base-300 rounded-box grid h-2 mt-5 w-full"></div>
-       <!-- กล่องสรุปอยู่ด้านขวา -->
+      <!-- กล่องสรุปอยู่ด้านขวา -->
       <div class="flex bg-orange-100 p-8 justify-end">
-        <div >
+        <div>
           <div class="grid grid-cols-2 gap-y-2">
-
             <div>Merchandise Subtotal :</div>
-            <div class="text-right ">฿ {{ CartStore.summaryPrice }}</div>
-            
+            <div class="text-right">฿ {{ CartStore.summaryPrice }}</div>
+
             <div>Shipping Subtotal :</div>
             <div class="text-right">฿ 0</div>
-            
+
             <div>Total Payment :</div>
             <div class="text-orange-400 text-right">
               <b>฿ {{ CartStore.summaryPrice }}</b>
             </div>
           </div>
-          
+
           <div class="flex justify-end">
-            <RouterLink :to="{ name: 'success' }" class="btn btn-accent mt-4">Place Order</RouterLink>
+            <button class="btn btn-accent mt-4">Place Order</button>
           </div>
         </div>
       </div>
     </div>
-
-    
   </UserLayout>
 </template>
