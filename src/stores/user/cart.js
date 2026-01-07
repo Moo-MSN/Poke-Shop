@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 export const useCartStore = defineStore("cart", {
   state: () => ({
     items: [],
+    checkout: {},
   }),
   getters: {
     summaryQuantity(state) {
@@ -10,9 +11,7 @@ export const useCartStore = defineStore("cart", {
     },
 
     summaryPrice(state) {
-      return state.items.reduce((acc, item) => 
-        acc + (item.price * item.quantity), 0
-      );
+      return state.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
     },
   },
   actions: {
@@ -44,6 +43,22 @@ export const useCartStore = defineStore("cart", {
     removeItemInCart(index) {
       this.items.splice(index, 1);
       localStorage.setItem("cart-data", JSON.stringify(this.items)); //Save data to localstorage
+    },
+    placeOrder(userData) {
+      const orderData = {
+        ...userData, // เป็นการใช้ object spread operator (...userData) เพื่อรวมข้อมูลจาก userData เข้ากับ object ใหม่ orderData
+        totalPrice: this.summaryPrice,
+        paymantMethod: "Credit Cart",
+        createdDate: new Date().toLocaleString(),
+        orderNumber: `AA ${Math.floor(Math.random() * 90000 + 10000)}`,
+      };
+      localStorage.setItem("order-data", JSON.stringify(orderData));
+    },
+    loadCheckout() {
+      const orderData = localStorage.getItem("order-data"); // ทำการดึงข้อมูลจาก localstorage 
+      if (orderData) { // ทำการเช็คว่ามีข้อมูลไหม ถ้ามีให้ parse ข้อมูลออกมา ถ้าไม่มีก็ทำการกลับไปยังหน้าสินค้า
+        this.checkout = JSON.parse(orderData);
+      }
     },
   },
 });
