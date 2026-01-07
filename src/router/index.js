@@ -6,6 +6,7 @@ import ProfileView from '@/views/user/ProfileView.vue'
 import SearchView from '@/views/user/SearchView.vue'
 import StoreView from '@/views/user/StoreView.vue'
 import SuccessView from '@/views/user/SuccessView.vue'
+import RegisterView from '@/views/user/RegisterView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,7 +46,11 @@ const router = createRouter({
       name: 'store',
       component: StoreView,
     },
-    
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterView,
+    },
 
     // Admin
 
