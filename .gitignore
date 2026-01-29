@@ -28,3 +28,10 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# ไม่ให้ commit ข้อมูลจริงของ DB
+mysql-data/
+
+# ไม่ให้ commit secrets
+.env
+
