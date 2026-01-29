@@ -3,6 +3,7 @@ version: '3.8'
 services:
   db:
     image: mysql:latest
+    platform: linux/arm64/v8   # รองรับ ARM (Mac M1/M2)
     container_name: mysql-db
     restart: always
     environment:
@@ -17,6 +18,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
+    platform: linux/amd64       # phpMyAdmin ยังไม่มี arm64 → ใช้ amd64 + QEMU
     container_name: phpmyadmin
     restart: always
     depends_on:
@@ -26,6 +28,3 @@ services:
       PMA_PORT: 3306
     ports:
       - "8080:80"
-
-
-
