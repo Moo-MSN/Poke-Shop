@@ -32,8 +32,8 @@ const handleSearch = (event) => {
     router.push({
       name: "search",
       query: {
-        q:searchText.value
-      }
+        q: searchText.value,
+      },
     });
   }
 };
@@ -50,7 +50,7 @@ const handleSearch = (event) => {
       </div>
 
       <div class="flex-none">
-        <input v-if="isLoggedIn" v-model="searchText" @keyup="handleSearch" type="text" placeholder="Search by keyword" class="input input-bordered w-24 md:w-auto mr-2"  />
+        <input v-if="isLoggedIn" v-model="searchText" @keyup="handleSearch" type="text" placeholder="Search by keyword" class="input input-bordered w-24 md:w-auto mr-2" />
 
         <div v-if="isLoggedIn" class="dropdown dropdown-end mr-2">
           <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
@@ -76,8 +76,11 @@ const handleSearch = (event) => {
             </div>
           </div>
         </div>
-
-        <button v-if="!isLoggedIn" @click="login" class="btn btn-ghost">Login / Register</button>
+        <div class="flex" v-if="!isLoggedIn" @click="login">
+          Login
+          <div>&nbsp;/&nbsp;</div>
+          <RouterLink :to="{ name: 'register' }">Register</RouterLink>
+        </div>
 
         <div v-else class="dropdown dropdown-end">
           <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
@@ -89,7 +92,9 @@ const handleSearch = (event) => {
             <li>
               <RouterLink :to="{ name: 'profile' }" class="justify-between"> Profile </RouterLink>
             </li>
-            <li><a @click="logout">Logout</a></li>
+            <li>
+              <RouterLink :to="{ name: 'home' }"><a @click="logout">Logout</a></RouterLink>
+            </li>
           </ul>
         </div>
       </div>
