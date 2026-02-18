@@ -2,6 +2,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 
+// เรียกใช้ library mysql
+const mysql = require("mysql2/promise");
+
+
+// เรียกใช้ User, Password ของ Mysql ใน .env
+require("dotenv").config();
+
 // ประกาศเริ่มต้นการใช้ express
 const app = express();
 
@@ -9,52 +16,78 @@ const app = express();
 app.use(bodyParser.json());
 
 // เราสร้างตัวแปร users ขึ้นมาเป็น Array จำลองการเก็บข้อมูลใน Server (ซึ่งของจริงจะเป็น database)
-let users = [];
-let counter = 1;
+// let users = [];
+// let counter = 1;
+let conn = null;
+
+// สร้าง Connection pool กับ myaql
+const connectMySQL = async () => {
+  conn = await mysql.createConnection({
+    host: "localhost",
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+  });
+};
 
 // สร้าง API path GET Users ออกมาทั้งหมด
-app.get("/users", (req, res) => {
-  res.json(users);
+app.get("/users", async (req, res) => {
+  try {
+    let results = await conn.query("SELECT * FROM users");
+    res.json(results[0]);
+  } catch (error) {
+    console.error("Error fetching userd:", error.message);
+    res.status(500).json({ error: "Error fatching users" });
+  }
 });
 
 // สร้าง API path POST
-app.post("/users", (req, res) => {
+app.post("/users", async (req, res) => {
   const data = req.body;
-  const newUser = {
-    id: counter,
-    firstname: data.firstname,
-    lastname: data.lastname,
-  };
-
-  counter += 1;
-
-  users.push(newUser);
-
-  // server res
-  res.status(201).json({ message: "User Create Successfully", user: newUser });
+  try {
+    const results = await conn.query("INSERT INTO users SET ?", data);
+    const userId = results[0].insertId;
+    // server res
+    res.status(201).json({ message: "User Create Successfully", userId });
+  } catch (error) {
+    console.error("Error creating user:".error.message);
+    res.status(500).json({ error: "Error creating user" });
+  }
 });
 
 // สร้าง API path GET User ออกมารายคน โดยใช้ id
-app.get("/users/:id", (req, res) => {
+app.get("/users/:id", async (req, res) => {
   const id = req.params.id;
-
-  // Find user id
-  const user = users.find((user) => user.id === parseInt(id));
-
-  // Check id ถ้าตรงให้ res กลับ เป็น json
-  if (user) {
-    res.json(user);
-  } else {
-    res.status(404).json({ error: "User not found" });
+  try {
+    let [results] = await conn.query("SELECT * FROM users WHERE id = ?", [id]);
+    // Check id ถ้าตรงให้ res กลับ เป็น json
+    if (results.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json(results[0]);
+  } catch (error) {
+    console.error("Error fetching user:", error.message);
+    res.status(500).json({ error: "Error fetching user" });
   }
 });
 
 // สร้าง API path PUT
-app.put("/user/:id", (req, res) => {
+app.put("/users/:id", async (req, res) => {
   const id = req.params.id;
   const data = req.body;
-
-    // Find user id
+  try {
+    const results = await conn.query('UPDATE users SET ? WHRER id = ? ', [data,id])
+    if (results[0].affectedRows === 0){
+        return res.status(404).json({error:"User not found"})
+    }
+    res.json({message:'User updated successfully', userId:id})
+  } catch (error) {
+    console.error("Error updated user:",error.message)
+    res.status(500).json({error:'Error updating user'})
+  }
+});
+  /*
+  // Find user id
   const user = users.find((user) => user.id === parseInt(id));
 
   if (user) {
@@ -72,10 +105,11 @@ app.put("/user/:id", (req, res) => {
 
   // server res
   res.json({ message: "User Update Successfully", post: userToUpdate });
-});
+}); 
+*/
 
 // สร้าง API path patch
-app.patch("/user/:id", (req, res) => {
+/*app.patch("/user/:id", (req, res) => {
   const id = req.params.id;
   const data = req.body;
 
@@ -92,13 +126,24 @@ app.patch("/user/:id", (req, res) => {
     userToUpdate.lastname = data.lastname;
   }
   res.json({ message: "User updated successfully", user: userToUpdate });
-});
+}); */
 
 // สร้าง API path delete
-app.delete("/users/:id", (req, res) => {
+app.delete("/users/:id", async (req, res) => {
   const id = req.params.id;
-  const index = users.findIndex((user)=> user.id === parseInt(id));
-
+  const index = users.findIndex((user) => user.id === parseInt(id));
+  try{
+    const results = await conn.query('DELETE FROM users WHERE id = ?',[id]);
+    if (results[0].affectedRows === 0){
+        return res.status(404).json({error:'User not fount'})
+    }
+    res.json({message: 'User deleting successfully', userId,id})
+  }catch (error){
+    console.error('Error deleted user:', error.message)
+    res.status(500).json({error:'Error deleted user'})
+  }
+})
+/*
   //Check ถ้ามี index ที่ถูกต้อง
   if (index >= 0 && index < users.length) {
     // Remove the user ที่ index ถูกต้อง
@@ -108,7 +153,9 @@ app.delete("/users/:id", (req, res) => {
     res.status(404).json({ message: "User not found" });
   }
 });
+*/
 // ประกาศ​gxbf http server ที่ port 8000 (ตามตัวแปร port)
-app.listen(8000, () => {
-  console.log(`Server started on port 8000`);
+app.listen(8000, async () => {
+  await connectMySQL();
+  console.log("Server started on port 8000");
 });
