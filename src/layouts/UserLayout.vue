@@ -44,7 +44,7 @@ const handleSearch = (event) => {
   <div class="container mx-auto">
     <div class="navbar bg-base-100">
       <div class="flex-1">
-        <RouterLink :to="{ name: 'home' }" class="text-xl">
+        <RouterLink :to="{ name: 'home' }" class="inline-block" >
           <img class="h-18" src="/src/components/icons/images Background Removed.png" />
         </RouterLink>
       </div>
