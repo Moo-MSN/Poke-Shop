@@ -23,12 +23,6 @@ const addToCart = (product) => {
         <img src="/src/components/icons////pokeball Background Removed.png" />
       </div>
 
-      <div class="flex flex-row justify-center gap-5 p-5">
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
-      </div>
-
       <!--Product Store-->
       <!-- Move Code to Components for use in store and search page-->
       <Product :products="productStore.list" :addToCart="addToCart"> </Product>
