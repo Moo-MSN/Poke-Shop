@@ -1,10 +1,10 @@
 // เรียกใช้ library express ด้วยคำสั่ง require
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require ("cors")
 
 // เรียกใช้ library mysql
 const mysql = require("mysql2/promise");
-
 
 // เรียกใช้ User, Password ของ Mysql ใน .env
 require("dotenv").config();
@@ -14,6 +14,9 @@ const app = express();
 
 // Parse incoming JSON data
 app.use(bodyParser.json());
+
+// ใช้ Cors เพื่อให้ Frontend เข้ามาใช้ได้
+app.use(cors()) ;
 
 // เราสร้างตัวแปร users ขึ้นมาเป็น Array จำลองการเก็บข้อมูลใน Server (ซึ่งของจริงจะเป็น database)
 // let users = [];
@@ -76,17 +79,17 @@ app.put("/users/:id", async (req, res) => {
   const id = req.params.id;
   const data = req.body;
   try {
-    const results = await conn.query('UPDATE users SET ? WHRER id = ? ', [data,id])
-    if (results[0].affectedRows === 0){
-        return res.status(404).json({error:"User not found"})
+    const results = await conn.query("UPDATE users SET ? WHRER id = ? ", [data, id]);
+    if (results[0].affectedRows === 0) {
+      return res.status(404).json({ error: "User not found" });
     }
-    res.json({message:'User updated successfully', userId:id})
+    res.json({ message: "User updated successfully", userId: id });
   } catch (error) {
-    console.error("Error updated user:",error.message)
-    res.status(500).json({error:'Error updating user'})
+    console.error("Error updated user:", error.message);
+    res.status(500).json({ error: "Error updating user" });
   }
 });
-  /*
+/*
   // Find user id
   const user = users.find((user) => user.id === parseInt(id));
 
@@ -131,18 +134,17 @@ app.put("/users/:id", async (req, res) => {
 // สร้าง API path delete
 app.delete("/users/:id", async (req, res) => {
   const id = req.params.id;
-  const index = users.findIndex((user) => user.id === parseInt(id));
-  try{
-    const results = await conn.query('DELETE FROM users WHERE id = ?',[id]);
-    if (results[0].affectedRows === 0){
-        return res.status(404).json({error:'User not fount'})
+  try {
+    const results = await conn.query("DELETE FROM users WHERE id = ?", [id]);
+    if (results[0].affectedRows === 0) {
+      return res.status(404).json({ error: "User not fount" });
     }
-    res.json({message: 'User deleting successfully', userId,id})
-  }catch (error){
-    console.error('Error deleted user:', error.message)
-    res.status(500).json({error:'Error deleted user'})
+    res.json({ message: "User deleting successfully", userId, id });
+  } catch (error) {
+    console.error("Error deleted user:", error.message);
+    res.status(500).json({ error: "Error deleted user" });
   }
-})
+});
 /*
   //Check ถ้ามี index ที่ถูกต้อง
   if (index >= 0 && index < users.length) {
@@ -154,7 +156,17 @@ app.delete("/users/:id", async (req, res) => {
   }
 });
 */
-// ประกาศ​gxbf http server ที่ port 8000 (ตามตัวแปร port)
+// // สร้าง API path GET Products ออกมาทั้งหมด
+app.get("/products", async (req, res) => {
+  try {
+    const [results] = await conn.query("SELECT * FROM products");
+    res.json(results);
+  } catch (error) {
+    console.error("Error fetching userd:", error.message);
+    res.status(500).json({ error: "Error fatching users" });
+  }
+});
+// ประกาศ​เป็น http server ที่ port 8000 (ตามตัวแปร port)
 app.listen(8000, async () => {
   await connectMySQL();
   console.log("Server started on port 8000");
