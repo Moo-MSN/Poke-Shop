@@ -76,7 +76,7 @@ const handleSearch = (event) => {
             </div>
           </div>
         </div>
-        <div class="flex" v-if="!isLoggedIn" @click="login">
+        <div class="flex cursor-pointer" v-if="!isLoggedIn" @click="login">
           Login
           <div>&nbsp;/&nbsp;</div>
           <RouterLink :to="{ name: 'register' }">Register</RouterLink>
