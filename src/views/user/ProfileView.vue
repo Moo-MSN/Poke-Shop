@@ -21,17 +21,37 @@ import UserLayout from "@/layouts/UserLayout.vue";
       <div class="grid grid-cols-2">
         <div>
           <fieldset class="fieldset">
-            <label class="font-semibold">First Name</label>
-            <input type="text" class="input" placeholder="Type here" />
+            <label class="text-base font-semibold">First Name</label>
+            <div class="text-base">รอดึงจาก db</div>
           </fieldset>
         </div>
         <div>
           <fieldset class="fieldset">
-            <label class=" font-semibold">Last Name</label>
-            <input type="text" class="input" placeholder="Type here" />
+            <label class="text-base font-semibold">Last Name</label>
+            <div class="text-base">รอดึงจาก db</div>
           </fieldset>
         </div>
-        
+         <div>
+          <fieldset class="fieldset">
+            <label class="text-base font-semibold">E-mail</label>
+            <div class="text-base">รอดึงจาก db</div>
+          </fieldset>
+        </div>
+         <div>
+          <fieldset class="fieldset">
+            <label class="text-base font-semibold">Date of Birth</label>
+            <div class="text-base">รอดึงจาก db</div>
+          </fieldset>
+        </div>
+         <div>
+          <fieldset class="fieldset">
+            <label class="text-base font-semibold">Address</label>
+            <div class="text-base">รอดึงจาก db</div>
+          </fieldset>
+        </div>
+      </div>
+      <div class="flex flex-col mt-5 mx-auto">
+        <button class="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl ">Edit Your Profile</button>
       </div>
     </div>
   </UserLayout>
