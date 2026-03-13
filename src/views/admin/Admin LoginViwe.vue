@@ -1,3 +1,8 @@
+<script setup>
+// Admin Login
+import { RouterLink } from "vue-router";
+</script>
+
 <template>
   <div class="h-screen flex items-center">
     <div class="max-w-xl flex shadow-xl mx-auto items-center justify-center p-8">
@@ -6,9 +11,10 @@
         <form>
           <input type="text" placeholder="Username" class="input input-bordered w-full mb-3" />
           <input type="password" placeholder="Password" class="input input-bordered w-full mb-3" />
-          <button type="submit" class="btn btn-primary w-full">Login</button>
+          <RouterLink :to="{ name: 'admin-dashboard' }" type="submit" class="btn btn-primary w-full">Login</RouterLink>
         </form>
       </div>
-    </div>
+  </div >
   </div>
 </template>
+  
