@@ -37,7 +37,7 @@ onMounted(() => {
 <template>
   <div class="drawer lg:drawer-open">
     <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
-    <div class="drawer-content">
+    <div class="drawer-content mx-4">
       <!-- Page content here -->
       <div class="flex lg:hidden items-center justify-center h-screen">
         <label for="my-drawer-3" class="btn btn-xs drawer-button"> Open drawer </label>
