@@ -1,11 +1,11 @@
 <script setup>
 import { ref, onMounted, computed, watch } from "vue";
-import { useRoute,useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import UserLayout from "@/layouts/UserLayout.vue";
 import Product from "@/components/Product.vue";
 
-import { useProductStore } from "@/stores/user/Product";
+import { useProductStore } from "@/stores/user/product";
 import { useCartStore } from "@/stores/user/cart";
 
 const searchText = ref("");
@@ -20,17 +20,17 @@ watch(
   (newSearchText) => {
     searchText.value = newSearchText;
   },
-  { immediate: true }
+  { immediate: true },
 ); // immediate: ture เพื่อใช้ในการรันครั้งแรกออกมา
 
 const filterproducts = computed(() => {
   return productStore.filterProducts(searchText.value);
 });
 
-const addToCart = (product) =>{
-  CartStore.addToCart(product)
-  router.push({name:'cart'})
-}
+const addToCart = (product) => {
+  CartStore.addToCart(product);
+  router.push({ name: "cart" });
+};
 </script>
 
 <template>
