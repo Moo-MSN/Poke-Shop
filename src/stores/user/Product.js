@@ -4,7 +4,7 @@ import axios from "axios";
 // BaseUrl to DB
 const BASE_URL = "http://localhost:8000";
 
-export const useProductStore = defineStore("product", {
+export const useProductStore = defineStore("user-products", {
   state: () => ({
     list: [],
   }),
