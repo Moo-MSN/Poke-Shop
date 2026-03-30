@@ -108,7 +108,7 @@ const router = createRouter({
 
     {
       path: "/admin/products/update/:id",
-      name: "admin-product-update",
+      name: "admin-products-update",
       component: AdminProductUpdate,
     },
     // order
