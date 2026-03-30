@@ -1,30 +1,33 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted } from "vue";
 import { RouterLink } from "vue-router";
+
+// import state เข้ามาเพื่อใช้ data ในการ mock ก่อนเชื่อมไป DB
+import { useAdminProductStore } from "@/stores/admin/product";
+
 import AdminLayout from "@/layouts/AdminLayout.vue";
 
 // icon
 import Trash from "@/components/icons/Trash.vue";
 import Edit from "@/components/icons/Edit.vue";
 
-const products = ref([
-  {
-    name: "test",
-    imageUrl: "123",
-    price: "111",
-    quantity: "20",
-    remainquantity: "11",
-    status: "open",
-    UpdatedAt: new Date().toLocaleString(),
-  },
-]);
+const adminProductStore = useAdminProductStore();
+
+onMounted(() => {
+  adminProductStore.loadProduct();
+});
+
+// ประกาศ function เพื่อเรียกใช้ removeProduct ใน useAdminProductStore
+const removeProduct = (index) => {
+  adminProductStore.removeProduct(index);
+};
 </script>
 
 <template>
   <AdminLayout>
     <div class="flex my-10 items-center justify-between">
       <div class="text-2xl font-semibold">Products</div>
-      <button class="btn btn-neutral btn-xs sm:btn-sm md:btn-md">Add New</button>
+      <RouterLink :to="{ name: 'admin-products-create' }" class="btn btn-neutral btn-xs sm:btn-sm md:btn-md">Add New</RouterLink>
     </div>
     <div class="overflow-x-auto">
       <table class="table">
@@ -41,21 +44,28 @@ const products = ref([
           </tr>
         </thead>
         <tbody>
-          <!-- row 1 -->
-          <tr v-for="product in products" class="text text-center">
+          <!-- row 1 --><!-- index ใช้ระบุตำแหน่งข้อมูลในการแก้ไขหรือลบ product -->
+          <tr v-for="(product, index) in adminProductStore.list" class="text text-center">
             <th>{{ product.name }}</th>
-            <td>{{ product.imageUrl }}</td>
+            <td>
+              <img :src="product.imageUrl" class="w-20 mx-auto" />
+            </td>
             <td>{{ product.price }}</td>
             <td>{{ product.remainquantity }}/{{ product.quantity }}</td>
-            <td>{{ product.status }}</td>
+            <td>
+              <div class="badge" :class="product.status === 'open' ? 'badge-success' : 'badge-error'">
+                {{ product.status }}
+              </div>
+            </td>
             <td class="w-50">{{ product.UpdatedAt }}</td>
-            <td class="flex gap-2 justify-center">
-              <RouterLink >
+            <td>
+              <RouterLink :to="{name:'admin-products-update',params:{id:index}}">
                 <button class="btn btn-square btn-ghost">
                   <Edit></Edit>
                 </button>
               </RouterLink>
-              <button class="btn btn-square btn-ghost">
+
+              <button class="btn btn-square btn-ghost" @click="removeProduct(index)">
                 <Trash></Trash>
               </button>
             </td>
