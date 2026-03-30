@@ -1,5 +1,5 @@
 <script setup>
-import { RouterLink, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 import { onMounted, ref } from "vue";
 
 const route = useRoute();
@@ -51,7 +51,7 @@ onMounted(() => {
         <li class="text-xl font-semibold">
           <div>Admin</div>
         </li>
-        <li v-for="page in pageData">
+        <li v-for="page in pageData " >
           <RouterLink :to="page.route" :class="currentPath === page.route ? 'menu-active' : ''">
             {{ page.name }}
           </RouterLink>
