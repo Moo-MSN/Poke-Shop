@@ -59,10 +59,8 @@ const removeProduct = (index) => {
             </td>
             <td class="w-50">{{ product.UpdatedAt }}</td>
             <td>
-              <RouterLink :to="{name:'admin-products-update',params:{id:index}}">
-                <button class="btn btn-square btn-ghost">
-                  <Edit></Edit>
-                </button>
+              <RouterLink :to="{ name: 'admin-products-update', params: { id: index } }" class="btn btn-square btn-ghost">
+                <Edit></Edit>
               </RouterLink>
 
               <button class="btn btn-square btn-ghost" @click="removeProduct(index)">
