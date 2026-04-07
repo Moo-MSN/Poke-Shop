@@ -90,7 +90,7 @@ const router = createRouter({
     },
     {
       path: "/admin/users/update/:id",
-      name: "admin-users-updata",
+      name: "admin-users-update",
       component: AdminUserUpdate,
     },
     // product
