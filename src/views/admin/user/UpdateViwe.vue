@@ -4,8 +4,12 @@ import { useRoute, useRouter } from "vue-router";
 import { ref, reactive, onMounted } from "vue";
 
 import { useAdminUserStore } from "@/stores/admin/user";
+import { useEventStore } from "@/stores/event";
 
 const adminUserStore = useAdminUserStore();
+// Event Toast
+const eventStore = useEventStore();
+
 const route = useRoute();
 const router = useRouter();
 
@@ -29,7 +33,10 @@ const updateUser = () => {
     // ถ้า userId.value ไม่เท่ากับ -1 จะเป็น
     adminUserStore.updateUser(userId.value, userData);
     // console.log(userData)
-    alert("Update User Completed");
+    // alert("Update User Completed");
+
+    // use event Toast
+    eventStore.popupMessage("info", "Update User Successful!");
     router.push({ name: "admin-users" });
   }
 };
@@ -39,7 +46,7 @@ const updateUser = () => {
   <AdminLayout>
     <div class="shadow-2xl p-8 mt-5">
       <!-- ใส่ +1 เพื่อให้แสดง id เริ่มจาก 1 เพื่อกันสับสน แต่ถ้าต่อ DB อาจจะดึงเป็น id ที่รันจาก DB -->
-      <div class="text-2xl font-semibold">Updete User id: {{ userId+1}}</div>
+      <div class="text-2xl font-semibold">Updete User id: {{ userId + 1 }}</div>
       <div class="divider"></div>
       <div class="grid grid-cols-1 gap-6">
         <!-- Name -->

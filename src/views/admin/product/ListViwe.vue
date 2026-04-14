@@ -2,10 +2,13 @@
 import { onMounted } from "vue";
 import { RouterLink } from "vue-router";
 
+import AdminLayout from "@/layouts/AdminLayout.vue";
+
 // import state เข้ามาเพื่อใช้ data ในการ mock ก่อนเชื่อมไป DB
 import { useAdminProductStore } from "@/stores/admin/product";
 
-import AdminLayout from "@/layouts/AdminLayout.vue";
+// useEventStore เพ่ือใช้ Toast
+import { useEventStore } from "@/stores/event";
 
 // icon
 import Trash from "@/components/icons/Trash.vue";
@@ -13,6 +16,7 @@ import Edit from "@/components/icons/Edit.vue";
 import Table from "@/components/Table.vue";
 
 const adminProductStore = useAdminProductStore();
+const eventStore = useEventStore();
 
 onMounted(() => {
   adminProductStore.loadProduct();
@@ -20,6 +24,8 @@ onMounted(() => {
 
 // ประกาศ function เพื่อเรียกใช้ removeProduct ใน useAdminProductStore
 const removeProduct = (index) => {
+  // use event Toast
+  eventStore.popupMessage("warning", "Delete Successful!");
   adminProductStore.removeProduct(index);
 };
 </script>
@@ -30,7 +36,7 @@ const removeProduct = (index) => {
       <div class="text-2xl font-semibold">Products</div>
       <RouterLink :to="{ name: 'admin-products-create' }" class="btn btn-neutral btn-xs sm:btn-sm md:btn-md">Add New</RouterLink>
     </div>
-    <Table :Headers="['Name','Image','Price','Quantity','Status','Updated At','Action']">
+    <Table :Headers="['Name', 'Image', 'Price', 'Quantity', 'Status', 'Updated At', 'Action']">
       <!-- row 1 --><!-- index ใช้ระบุตำแหน่งข้อมูลในการแก้ไขหรือลบ product -->
       <tr v-for="(product, index) in adminProductStore.list" class="text text-center">
         <th>{{ product.name }}</th>

@@ -4,8 +4,11 @@ import { computed, onMounted, reactive, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 import { useAdminProductStore } from "@/stores/admin/product";
+import { useEventStore } from "@/stores/event";
 
 const adminProductStore = useAdminProductStore();
+// Event Toast
+const eventStore = useEventStore();
 
 // ประการ productId เพื่อรับค่า id จาก params เข้าไปแทนค่าตรง -1
 const productId = ref(-1);
@@ -45,13 +48,19 @@ const updateProduct = () => {
     // ถ้า productId.value ไม่เท่ากับ -1 จะเป็น
     // Edit mode
     adminProductStore.updateProduct(productId.value, selectedProduct);
-    alert("Update product completed");
+    // alert("Update product completed");
+
+    // use event Toast
+    eventStore.popupMessage("info", "Update Product Successful!");
     router.push({ name: "admin-products" });
   } else {
     // ถ้า productId.value เท่ากับ -1 จะเป็น
     // Create or Add mode
     adminProductStore.addProduct(selectedProduct);
-    alert("Add product completed");
+    // alert("Add product completed");
+
+    // use event Toast
+    eventStore.popupMessage("success", "Update Product Successful!");
     router.push({ name: "admin-products" });
   }
 };
