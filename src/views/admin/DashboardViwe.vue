@@ -33,7 +33,9 @@ const donutOption = {
 
 <template>
   <AdminLayout>
-    <div class="text-3xl font-semibold my-5 m-5">Dashboard</div>
+    <div class="flex my-10 items-center justify-between">
+      <div class="text-2xl font-semibold lg:mr-5">Dashboard</div>
+    </div>
 
     <!-- Stat -->
     <div class="stats shadow w-full">
@@ -85,7 +87,7 @@ const donutOption = {
       <div class="flex-1">
         <div class="card w-full p-6 bg-base-100 shadow-xl">
           <h1 class="font-semibold">ประเภทการขาย</h1>
-          <apexchart  type="donut" :options="donutOption.options" :series="donutOption.series"></apexchart>
+          <apexchart type="donut" :options="donutOption.options" :series="donutOption.series"></apexchart>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-
+// alert: false ใช้เพื่อคุมการแสดงของ alert ในหน้าต่างๆ โดยใช้ v-if
 export const useEventStore = defineStore("event", {
   state: () => ({
     alert: false,
