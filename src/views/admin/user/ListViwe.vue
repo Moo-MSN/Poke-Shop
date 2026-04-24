@@ -24,7 +24,7 @@ const toggleStatus = (index) => {
     <Table :Headers="['Name', 'Role', 'Status', 'Updated At', 'Action']">
       <!-- row 1 --><!-- index ใช้ระบุตำแหน่งข้อมูลในการแก้ไขหรือลบ product -->
       <tr v-for="(user, index) in adminUserStore.list" class="text text-center">
-        <th>{{ user.name }}vrv</th>
+        <th>{{ user.name }}</th>
         <td>{{ user.role }}</td>
         <td>{{ user.status }}</td>
         <td>{{ user.updatedAt }}</td>
