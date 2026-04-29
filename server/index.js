@@ -1,7 +1,14 @@
 // เรียกใช้ library express ด้วยคำสั่ง require
 const express = require("express");
 const bodyParser = require("body-parser");
-const cors = require ("cors")
+const cors = require("cors");
+
+// เรียกใช้ multer เพื่อเก็บไฟล์ image ให้เก็บลงใน folder upload ใน project
+const multer = require("multer");
+const upload = multer({ dest: "uploads" });
+
+// เรียกใช้ bcrypt เพื่อ บันทึก password เป็น hash ช่วยรักษาความปลอดภัย
+const bcrypt = require("bcrypt");
 
 // เรียกใช้ library mysql
 const mysql = require("mysql2/promise");
@@ -16,7 +23,7 @@ const app = express();
 app.use(bodyParser.json());
 
 // ใช้ Cors เพื่อให้ Frontend เข้ามาใช้ได้
-app.use(cors()) ;
+app.use(cors());
 
 // เราสร้างตัวแปร users ขึ้นมาเป็น Array จำลองการเก็บข้อมูลใน Server (ซึ่งของจริงจะเป็น database)
 // let users = [];
@@ -44,16 +51,30 @@ app.get("/users", async (req, res) => {
   }
 });
 
-// สร้าง API path POST
-app.post("/users", async (req, res) => {
+// สร้างไฟล์ออกมาเพื่อให้ frontend ใช้เก็บ file image
+app.use("/uploads", express.static("uploads"));
+
+// สร้าง API path POST และ path ของ file image
+app.post("/users", upload.single("image"), async (req, res) => {
   const data = req.body;
   try {
+    // เพิ่ม bcrypt เพื่อ hash password ก่อนบันทึก
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    data.password = hashedPassword;
+
+    // เก็บ full URL ของไฟล์ image ลง DB เวลาโหลดไปใช้ในหน้า profile จะได้แสดงรูปได้
+    if (req.file) {
+      data.imageurl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+    } else {
+      data.imageurl = null;
+    }
+
     const results = await conn.query("INSERT INTO users SET ?", data);
     const userId = results[0].insertId;
     // server res
     res.status(201).json({ message: "User Create Successfully", userId });
   } catch (error) {
-    console.error("Error creating user:".error.message);
+    console.error("Error creating user:", error.message);
     res.status(500).json({ error: "Error creating user" });
   }
 });
@@ -67,7 +88,15 @@ app.get("/users/:id", async (req, res) => {
     if (results.length === 0) {
       return res.status(404).json({ error: "User not found" });
     }
-    res.json(results[0]);
+
+    const user = results[0];
+
+    // ถ้า imageurl เก็บเป็น relative path → ต่อ full URL ให้เลย
+    if (user.imageurl && !user.imageurl.startsWith("http")) {
+      user.imageurl = `${req.protocol}://${req.get("host")}/${req.file.filename}`;
+    }
+
+    res.json(user);
   } catch (error) {
     console.error("Error fetching user:", error.message);
     res.status(500).json({ error: "Error fetching user" });
