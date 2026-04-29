@@ -41,7 +41,7 @@ const router = createRouter({
       component: CheckoutView,
     },
     {
-      path: "/profile",
+      path: "/profile/:id",
       name: "profile",
       component: ProfileView,
     },
